@@ -1,78 +1,131 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+1) add the schema to the Aritcle model
+    $ php artisan make:model Article -m
+2) add the fillable column to the Article Column
+3) adding the ArticleSeeder
+    $ php artisan make:seeder ArticlesTableSeeder
+4) adding the UserTableSeeder
+    $ php artisan make:seeder UserTableSeeder
+   in the file add the user namaspace "use \App\User"
+5) add the two seeder reference to the main 
+   DatabaseSeeder.php file
+   we call the two class from the DatabaseSeeder
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+6) call the Seeder with the command
+   $php artisan db:seed
 
-## About Laravel
+7) create the controller
+   $ php artisan make:controller ArticleController
+   and add the Article model namespace
+   use App\Article
+8) add the CRUD api method in the class
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+9) for the error we get a html response with
+   the render function.So we change the ender function  to get the json response
+   in the "app/Exception/Handler.php"
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+10) we extend the user database and add another 
+    migration and add the api_token
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+    $ php artisan make:migration --table=users adds_api_token_to_users_table
 
-## Learning Laravel
+    add the column api_token column
+    refresh the whole database
+    $ php artisan migrate:refresh --seed
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+11) make a register endpoint
+    and we dont use any controller
+    we use the Auth/RegisterController.php
+    and we add a function name "registered()"
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    there is a class name "RegisterUsers" in the
+    RegisterController use. this class call the 
+    a empty function registed() for further
+    so if we add the registed() function inside 
+    the register controller we do not need to
+    call the function registration function will automatically call it after the successfull registration
+    search Registercontroller in the file
 
-## Laravel Sponsors
+    this registered() function take two parameter
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+    registered($request,$user)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
+12) we call a function called generatetoken
+    that will be called from the model Article class
+    so we need to write the method there
+    to create a random token 
+    we need to import the namaspace
+    "Illuminate\Support\Str"
 
-## Contributing
+    and we use the Str::random(60)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    for creating random string for ceating token
 
-## Code of Conduct
+13) the register endpoint will redirect the data to the "RegisterController@register" if it is successfull then it will call the custom registred function automatically
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+when we post json in the register we threre will 
+four field
+like
+{"name": "John", "email": "john.doe@toptal.com", "password": "toptal123", "password_confirmation": "toptal123"}'
 
-## Security Vulnerabilities
+after posting this if everything goes well yoi will get a token
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+14) as like the for registration we change default RegisterController
 
-## License
+for login we change the loginController
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+actually not the LoginController
+
+Logincontroller import a class name "AuthenticateUsers" which is AuthenticateUsers.php
+
+we change the login method and return a json
+
+to find in VSCODE just type ctrl+p and then AuthenticateUsers
+
+
+
+15) Create the login end point
+
+16) the end point take the json which has tow field
+{"email": "admin@home.com", "password": "password" }
+
+it will give you a token after posting data
+
+and you can use it as a bearer token and use it for login with any frontend framework
+
+17)Create a logout endpoint
+    when this endpoint hit 
+    we replace its api_token with null again 
+    and save it and send a json response 
+    so the token cant be used 
+
+18) we make another function in the LoginController
+    if you want you can make seperate controller
+    we dont do that here
+
+
+19) we made the user login and register and the article api both
+
+20) now we apply only the loggen in user can see this article get post put and delete
+
+    we basically do that with middleware
+    we add middleware directly in the route
+
+     int "api.php"
+
+    but you can make this middleware with command line
+
+    middleware means to access the the resource
+    you need to pass the route
+
+    luckly this is actually implemented when the laravel project is initialized  in the beginning
+
+    we add the middlw ware to the five Route
+
+21) if any thing wrong happen it may send you the html again for auth
+    so we need to add a unauthenticate function
+    this is future task
+
+thats it
+
+
+
