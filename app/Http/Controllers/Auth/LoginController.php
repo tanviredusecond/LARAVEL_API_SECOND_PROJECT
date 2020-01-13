@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -36,5 +37,20 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function logout(Request $request){
+        //check the user
+        $user = Auth::guard('api')->user(); //find the user based on the api not the web
+                                            // because we are using the api version of laravel
+        if($user){
+            //set the user token
+            $user->api_token = null;
+            $user->save();
+        }
+        return response()->json([
+            "data" => "User logged out",
+        ],200);
+                                            
     }
 }

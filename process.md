@@ -91,3 +91,41 @@ to find in VSCODE just type ctrl+p and then AuthenticateUsers
 it will give you a token after posting data
 
 and you can use it as a bearer token and use it for login with any frontend framework
+
+17)Create a logout endpoint
+    when this endpoint hit 
+    we replace its api_token with null again 
+    and save it and send a json response 
+    so the token cant be used 
+
+18) we make another function in the LoginController
+    if you want you can make seperate controller
+    we dont do that here
+
+
+19) we made the user login and register and the article api both
+
+20) now we apply only the loggen in user can see this article get post put and delete
+
+    we basically do that with middleware
+    we add middleware directly in the route
+
+     int "api.php"
+
+    but you can make this middleware with command line
+
+    middleware means to access the the resource
+    you need to pass the route
+
+    luckly this is actually implemented when the laravel project is initialized  in the beginning
+
+    we add the middlw ware to the five Route
+
+21) if any thing wrong happen it may send you the html again for auth
+    so we need to add a unauthenticate function
+    this is future task
+
+thats it
+
+
+
